@@ -1,0 +1,120 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 >> >> >>
+endobj
+4 0 obj
+<< /Length 2520 >>
+stream
+BT
+1 0 0 1 60 780 Tm
+/F1 24 Tf
+(Mandimbizara Juno) Tj
+0 -22 Td
+/F1 14 Tf
+(Fullstack & DevOps Engineer) Tj
+0 -16 Td
+/F1 11 Tf
+(Nosy Be Hell-ville, Madagascar | +261 32 66 875 43 | mandimbizarajuno@gmail.com) Tj
+0 -16 Td
+(Portfolio : https://app.pixel-rise.com/blog/author/6 | GitHub : github.com/GathonX) Tj
+0 -12 Td
+0 -22 Td
+/F1 14 Tf
+(Profil) Tj
+0 -16 Td
+/F1 11 Tf
+(Ingenieur fullstack avec 5 ans d'experience. Je concois des produits SaaS performants en) Tj
+0 -14 Td
+(combinant Laravel, React, Next.js et Docker pour automatiser et industrialiser les applications) Tj
+0 -14 Td
+(web.) Tj
+0 -10 Td
+0 -22 Td
+/F1 14 Tf
+(Competences techniques) Tj
+0 -16 Td
+/F1 11 Tf
+(Langages : PHP, JavaScript/TypeScript, Python, C#, SQL, Bash) Tj
+0 -16 Td
+(Frameworks : Laravel, Node.js, React, Next.js, Tailwind CSS, Bootstrap, jQuery) Tj
+0 -16 Td
+(Bases de donnees : MySQL, MariaDB, SQLite, MongoDB, Prisma ORM) Tj
+0 -16 Td
+(DevOps & outils : Docker, GitHub Actions \(CI/CD\), Vite, REST APIs, Monitoring, Postman,) Tj
+0 -14 Td
+(Insomnia) Tj
+0 -10 Td
+0 -22 Td
+/F1 14 Tf
+(Experiences professionnelles) Tj
+0 -18 Td
+/F1 12 Tf
+(PixelRise - SaaS d'automatisation marketing | Avril 2024 - Aujourd'hui | https://pixel-rise.com) Tj
+0 -16 Td
+/F1 11 Tf
+(- Plateforme Laravel 12 + React/Vite + Tailwind connectee a OpenAI pour contenus multi-canal.) Tj
+0 -16 Td
+(- Architecture Docker \(PHP, Node, MySQL\) + pipelines CI/CD et rollback zero downtime.) Tj
+0 -16 Td
+(- Optimisation SQL & NoSQL, migration progressive Firestore, dashboards analytics temps reel.) Tj
+0 -6 Td
+0 -18 Td
+/F1 12 Tf
+(IslandManager - Hub tourisme & hospitality | Oct 2024 - Dec 2024) Tj
+0 -16 Td
+/F1 11 Tf
+(- Back-office Laravel 11 + Vite, roles admin/user, authentification Sanctum, logging) Tj
+0 -14 Td
+(granulaire.) Tj
+0 -16 Td
+(- APIs REST securisees, documentation Swagger, SEO technique et deploiement cloud.) Tj
+0 -6 Td
+0 -18 Td
+/F1 12 Tf
+(Formateur Freelance | 2019 - Aujourd'hui) Tj
+0 -16 Td
+/F1 11 Tf
+(- Coaching dev fullstack & DevOps, programmes sur mesure pour entreprises et ecoles.) Tj
+0 -10 Td
+0 -22 Td
+/F1 14 Tf
+(Realisations cles) Tj
+0 -16 Td
+/F1 11 Tf
+(+42% de productivite marketing grace a PixelRise Automation Suite.) Tj
+0 -16 Td
+(Industrialisation CI/CD GitHub Actions pour startups SaaS & tourisme.) Tj
+0 -16 Td
+(Experiences React premium : carrousels Embla, animations et micro-interactions.) Tj
+0 -10 Td
+0 -22 Td
+/F1 14 Tf
+(Contact) Tj
+0 -16 Td
+/F1 11 Tf
+(Email : mandimbizarajuno@gmail.com | WhatsApp : +261 32 66 875 43 | Facebook : Tonny Montana MG) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000237 00000 n 
+0000002809 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+2879
+%%EOF

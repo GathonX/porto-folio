@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, CheckCircle2, CircuitBoard, Download, Mail, Phone, Shield, Loader2, Rocket, ShieldCheck, Stars } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, CheckCircle2, CircuitBoard, Download, Mail, Phone, Shield, Loader2, Rocket, ShieldCheck, Stars } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -314,7 +314,7 @@ const Index = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F27]/80 via-transparent" />
                   <div className="absolute bottom-4 left-4 rounded-full bg-white/15 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white">
-                    Nosy Be · Madagascar
+                    Nosy Be Hell-ville · Madagascar
                   </div>
                 </div>
 
@@ -353,9 +353,15 @@ const Index = () => {
                 Ce que je construis pour mes clients
               </h2>
             </div>
-            <Button variant="secondary" className="rounded-full border border-white/20 text-white">
-              Télécharger mon profil
-              <ArrowUpRight className="h-4 w-4" />
+            <Button
+              variant="secondary"
+              className="rounded-full border border-white/20 text-white"
+              asChild
+            >
+              <a href="/docs/mandimbizara-juno-cv.pdf" download>
+                Télécharger mon profil
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
             </Button>
           </div>
 
