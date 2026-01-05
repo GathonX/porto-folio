@@ -302,7 +302,7 @@ const Index = () => {
 
             <div className="halo">
               <div className="glass-card pulse-border relative overflow-hidden rounded-[2.5rem] border border-white/20 bg-white/10 px-8 pb-10 pt-8">
-                <div className="absolute -top-4 right-6 rounded-full bg-primary/20 px-4 py-2 text-xs font-semibold text-primary backdrop-blur">
+                <div className="absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-primary/20 px-4 py-2 text-xs font-semibold text-primary backdrop-blur md:left-auto md:right-6 md:translate-x-0">
                   Disponible pour missions 2026
                 </div>
                 <div className="relative aspect-[5/6] overflow-hidden rounded-[2rem] border border-white/15">
@@ -493,9 +493,9 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="relative overflow-hidden px-6 py-20 md:px-12">
+      <section className="relative overflow-hidden px-3 py-20 sm:px-5 md:px-10 lg:px-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(18,118,158,0.35),rgba(10,15,39,0.95))]" />
-        <div className="relative mx-auto max-w-6xl rounded-[3.5rem] border border-white/15 bg-white/5 p-10 text-white shadow-2xl shadow-primary/40 backdrop-blur-lg">
+        <div className="relative mx-auto max-w-6xl rounded-[3.5rem] border border-white/15 bg-white/5 p-4 text-white shadow-2xl shadow-primary/40 backdrop-blur-lg sm:p-8 lg:p-10">
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-sm uppercase tracking-[0.4em] text-white/70">Collaboration</p>
             <h2 className="mt-4 text-3xl font-semibold md:text-4xl">
@@ -507,8 +507,11 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-            <form onSubmit={handleSubmit} className="space-y-6 rounded-[2rem] border border-white/15 bg-white/10 p-8 shadow-xl shadow-primary/20">
+          <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+            <form
+              onSubmit={handleSubmit}
+              className="w-full space-y-6 rounded-[2rem] border border-white/15 bg-white/10 p-6 shadow-xl shadow-primary/20 sm:p-8"
+            >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="text-xs uppercase tracking-[0.3em] text-white/70">Nom complet *</label>
@@ -614,7 +617,7 @@ const Index = () => {
               </Button>
             </form>
 
-            <div className="space-y-6">
+            <div className="w-full space-y-6">
               <div className="rounded-[2rem] border border-white/15 bg-white/10 p-6">
                 <p className="text-xs uppercase tracking-[0.3em] text-white/70">Coordonnées directes</p>
                 <div className="mt-6 space-y-4">
@@ -629,7 +632,7 @@ const Index = () => {
                       <p className="text-[0.7rem] uppercase tracking-[0.3em] text-white/60">
                         {channel.label}
                       </p>
-                      <p className="mt-1 text-lg font-semibold text-white">{channel.value}</p>
+                      <p className="mt-1 break-words text-lg font-semibold text-white">{channel.value}</p>
                     </a>
                   ))}
                 </div>
@@ -637,7 +640,7 @@ const Index = () => {
 
               <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
                 <p className="text-xs uppercase tracking-[0.3em] text-white/70">Contact express</p>
-                <div className="mt-4 flex flex-wrap gap-4">
+                <div className="mt-4 flex flex-col gap-4 sm:flex-row">
                   <Button size="lg" className="flex-1 shadow-button shadow-primary/40" asChild>
                     <a href="https://wa.me/261326687543" target="_blank" rel="noreferrer">
                       WhatsApp direct
