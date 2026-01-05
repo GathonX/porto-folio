@@ -1,0 +1,326 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Palette signature */
+    --night: 230 59% 10%;
+    --abyss: 222 100% 16%;
+    --royal: 213 93% 24%;
+    --cerulean: 197 80% 35%;
+    --pure: 0 0% 100%;
+
+    --background: var(--night);
+    --foreground: var(--pure);
+
+    --card: 222 40% 12%;
+    --card-foreground: var(--pure);
+
+    --popover: 228 32% 12%;
+    --popover-foreground: var(--pure);
+
+    --primary: var(--cerulean);
+    --primary-foreground: var(--pure);
+    --primary-hover: 197 80% 30%;
+
+    --secondary: var(--royal);
+    --secondary-foreground: var(--pure);
+
+    --muted: 223 35% 20%;
+    --muted-foreground: 210 20% 82%;
+
+    --accent: var(--royal);
+    --accent-foreground: var(--pure);
+
+    --success: 147 62% 44%;
+    --success-foreground: var(--pure);
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: var(--pure);
+
+    --border: 224 32% 22%;
+    --input: 224 32% 22%;
+    --ring: var(--cerulean);
+
+    --gradient-primary: linear-gradient(135deg, hsl(var(--abyss)), hsl(var(--cerulean)));
+    --gradient-card: linear-gradient(160deg, hsl(var(--royal) / 0.75), hsl(var(--night) / 0.9));
+    --gradient-hero: radial-gradient(circle at top, hsl(var(--cerulean) / 0.8), transparent 65%);
+    --gradient-section: linear-gradient(120deg, hsl(var(--abyss) / 0.9), hsl(var(--night)));
+
+    --shadow-card: 0 25px 80px hsl(219 32% 5% / 0.55);
+    --shadow-card-hover: 0 20px 60px hsl(218 39% 15% / 0.6);
+    --shadow-button: 0 15px 30px hsl(197 80% 35% / 0.45);
+
+    --radius: 1rem;
+  }
+
+  body {
+    font-family: "Space Grotesk", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    @apply antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", "Space Grotesk", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  .dark {
+    --background: var(--night);
+    --foreground: var(--pure);
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: hsl(var(--pure) / 0.05);
+    border: 1px solid hsl(var(--pure) / 0.1);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(18px);
+  }
+
+  .halo {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .halo::after {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    background: conic-gradient(
+      from 120deg,
+      hsl(var(--cerulean) / 0.35),
+      transparent 35%,
+      hsl(var(--royal) / 0.25),
+      transparent 60%
+    );
+    filter: blur(70px);
+    opacity: 0.9;
+  }
+
+  .logo-mark {
+    @apply inline-flex h-12 w-12 items-center justify-center rounded-2xl text-xl font-semibold text-white;
+    background: linear-gradient(135deg, hsl(var(--cerulean)), hsl(var(--royal)));
+    border: 1px solid hsl(var(--pure) / 0.2);
+    box-shadow: 0 20px 30px hsl(210 80% 10% / 0.6);
+  }
+
+  .noise-overlay {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .noise-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath fill='%23ffffff10' d='M0 0h20v20H0z'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .interactive-card {
+    position: relative;
+    transition: transform 450ms ease, border-color 450ms ease, box-shadow 450ms ease;
+  }
+
+  .interactive-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at top, hsl(var(--cerulean) / 0.15), transparent 65%);
+    opacity: 0;
+    transition: opacity 450ms ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .interactive-card:hover,
+  .interactive-card:focus-within {
+    transform: translateY(-4px);
+    border-color: hsl(var(--cerulean) / 0.5);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .interactive-card:hover::after,
+  .interactive-card:focus-within::after {
+    opacity: 1;
+  }
+
+  .hero-aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .hero-aurora::before,
+  .hero-aurora::after {
+    content: "";
+    position: absolute;
+    width: 65%;
+    height: 65%;
+    background: radial-gradient(circle, hsl(var(--cerulean) / 0.4), transparent 70%);
+    filter: blur(60px);
+    animation: drift 14s ease-in-out infinite;
+  }
+
+  .hero-aurora::after {
+    top: auto;
+    bottom: 0;
+    right: 15%;
+    animation-delay: -6s;
+    background: radial-gradient(circle, rgba(4, 55, 117, 0.65), transparent 70%);
+  }
+
+  .hero-orb {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--cerulean)), transparent 70%);
+    filter: blur(10px);
+    opacity: 0.7;
+    animation: float 10s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+
+  .hero-orb.orb-1 {
+    top: 8%;
+    right: 12%;
+  }
+
+  .hero-orb.orb-2 {
+    bottom: 5%;
+    left: 5%;
+    animation-delay: -4s;
+  }
+
+  .pulse-border {
+    position: relative;
+  }
+
+  .pulse-border::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: inherit;
+    border: 1px solid hsl(var(--cerulean) / 0.35);
+    opacity: 0;
+    animation: pulse 3.5s ease-in-out infinite;
+  }
+
+  .scroll-marquee {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-marquee span {
+    display: inline-flex;
+    gap: 1.5rem;
+    white-space: nowrap;
+    animation: marquee 18s linear infinite;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.95rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: transform 300ms ease, opacity 300ms ease;
+  }
+
+  .status-pill.success {
+    background: hsl(var(--cerulean) / 0.18);
+    color: hsl(var(--pure));
+    border: 1px solid hsl(var(--cerulean) / 0.6);
+  }
+
+  .status-pill.error {
+    background: hsla(0, 82%, 45%, 0.18);
+    color: #ffb4c3;
+    border: 1px solid hsla(0, 82%, 65%, 0.5);
+  }
+
+  .status-pill.enter {
+    animation: fadePop 0.3s ease forwards;
+  }
+}
+
+@keyframes fadePop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(-10%, -10%, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(5%, 15%, 0) scale(1.1);
+  }
+  100% {
+    transform: translate3d(-10%, -10%, 0) scale(1);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
