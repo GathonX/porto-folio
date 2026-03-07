@@ -113,7 +113,7 @@ $smtpPort = getenv('MAIL_PORT');
 $smtpUsername = getenv('MAIL_USERNAME');
 $smtpPassword = getenv('MAIL_PASSWORD');
 $smtpEncryption = getenv('MAIL_ENCRYPTION');
-$defaultContactEmail = 'mamndimbizarajuno@gmail.com';
+$defaultContactEmail = 'mandimbizarajuno@gmail.com';
 $fromAddress = getenv('MAIL_FROM_ADDRESS') ?: $defaultContactEmail;
 $fromName = getenv('MAIL_FROM_NAME') ?: 'Mandimbizara Juno';
 $toAddress = getenv('MAIL_TO_ADDRESS') ?: $defaultContactEmail;
@@ -287,7 +287,7 @@ $emailBody = "<!DOCTYPE html>
         <div class='footer'>
             <p><strong>Ce message a été envoyé depuis le formulaire de contact du site web</strong></p>
             <p>Nosy-Be, Madagascar</p>
-            <p>📞 +261 32 66 875 43 | 📧 mamndimbizarajuno@gmail.com</p>
+            <p>📞 +261 32 66 875 43 | 📧 mandimbizarajuno@gmail.com</p>
         </div>
     </div>
 </body>

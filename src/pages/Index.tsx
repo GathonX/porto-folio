@@ -9,7 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useToast } from "@/hooks/use-toast";
 
 const heroImage = "/img/concept-de-marketing-des-medias-sociaux-pour-le-marketing-avec-des-applications11.avif";
-const CONTACT_EMAIL = "mamndimbizarajuno@gmail.com";
+const CONTACT_EMAIL = "mandimbizarajuno@gmail.com";
 
 const stats = [
   {
