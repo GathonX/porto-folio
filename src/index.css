@@ -255,6 +255,12 @@ All colors MUST be HSL.
     border: 1px solid hsl(var(--cerulean) / 0.6);
   }
 
+  .status-pill.loading {
+    background: hsl(var(--royal) / 0.22);
+    color: hsl(var(--pure));
+    border: 1px solid hsl(var(--royal) / 0.55);
+  }
+
   .status-pill.error {
     background: hsla(0, 82%, 45%, 0.18);
     color: #ffb4c3;

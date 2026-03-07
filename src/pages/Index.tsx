@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, BadgeCheck, CheckCircle2, CircuitBoard, Download, Mail, Phone, Shield, Loader2, Rocket, ShieldCheck, Stars } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -125,15 +126,42 @@ const contactReasons = [
   { value: "other", label: "Autre sujet" },
 ];
 
-const API_URL = import.meta.env.VITE_API_URL || "";
+const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, "");
+
+const isLoopbackUrl = (url: string) =>
+  /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(url);
+
+const resolveApiBaseUrl = () => {
+  const configured = (import.meta.env.VITE_API_URL || "").trim();
+  if (!configured) return "";
+
+  if (typeof window !== "undefined") {
+    const isLiveHost = !["localhost", "127.0.0.1"].includes(window.location.hostname);
+    if (isLiveHost && isLoopbackUrl(configured)) {
+      console.warn(
+        `[Contact] VITE_API_URL="${configured}" ignored in production-like host, fallback to same-origin endpoint.`
+      );
+      return "";
+    }
+  }
+
+  return normalizeBaseUrl(configured);
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
+const CONTACT_ENDPOINT = API_BASE_URL
+  ? `${API_BASE_URL}/send_email.php`
+  : `${import.meta.env.BASE_URL}send_email.php`;
 
 const Index = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormState);
   const [formStatus, setFormStatus] = useState<{
     type: "idle" | "loading" | "success" | "error";
     message?: string;
   }>({ type: "idle" });
   const [caseCarouselApi, setCaseCarouselApi] = useState<CarouselApi | null>(null);
+  const isSubmitting = formStatus.type === "loading";
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -163,17 +191,23 @@ const Index = () => {
     event.preventDefault();
 
     if (!formData.name || !formData.email || !formData.message) {
+      const requiredError = "Merci de remplir les champs obligatoires.";
       setFormStatus({
         type: "error",
-        message: "Merci de remplir les champs obligatoires.",
+        message: requiredError,
+      });
+      toast({
+        variant: "destructive",
+        title: "Champs incomplets",
+        description: requiredError,
       });
       return;
     }
 
     try {
       console.log("[Contact] Payload", formData);
-      setFormStatus({ type: "loading" });
-      const response = await fetch(`${API_URL}/send_email.php`, {
+      setFormStatus({ type: "loading", message: "Envoi en cours..." });
+      const response = await fetch(CONTACT_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -196,6 +230,13 @@ const Index = () => {
       toast({
         title: "Message envoyé",
         description: successMessage,
+      });
+      navigate("/merci", {
+        state: {
+          name: formData.name,
+          subject: formData.subject,
+          from: "contact-form",
+        },
       });
       setFormData(initialFormState);
     } catch (error) {
@@ -510,6 +551,7 @@ const Index = () => {
           <div className="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[1.15fr_0.85fr]">
             <form
               onSubmit={handleSubmit}
+              aria-busy={isSubmitting}
               className="w-full space-y-6 rounded-[2rem] border border-white/15 bg-white/10 p-6 shadow-xl shadow-primary/20 sm:p-8"
             >
               <div className="grid gap-4 sm:grid-cols-2">
@@ -521,7 +563,8 @@ const Index = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="mt-2 border-white/20 bg-white/5 text-white placeholder:text-white/40"
+                    disabled={isSubmitting}
+                    className="mt-2 border-white/20 bg-white/5 text-white placeholder:text-white/40 disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
                 <div>
@@ -533,7 +576,8 @@ const Index = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="mt-2 border-white/20 bg-white/5 text-white placeholder:text-white/40"
+                    disabled={isSubmitting}
+                    className="mt-2 border-white/20 bg-white/5 text-white placeholder:text-white/40 disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
               </div>
@@ -546,7 +590,8 @@ const Index = () => {
                     placeholder="+33 6 12 34 56 78"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="mt-2 border-white/20 bg-white/5 text-white placeholder:text-white/40"
+                    disabled={isSubmitting}
+                    className="mt-2 border-white/20 bg-white/5 text-white placeholder:text-white/40 disabled:cursor-not-allowed disabled:opacity-60"
                   />
                 </div>
                 <div>
@@ -556,7 +601,8 @@ const Index = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      className="w-full appearance-none rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary"
+                      disabled={isSubmitting}
+                      className="w-full appearance-none rounded-md border border-white/20 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {contactReasons.map((reason) => (
                         <option key={reason.value} value={reason.value} className="text-gray-900">
@@ -577,7 +623,8 @@ const Index = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  className="mt-2 min-h-[150px] border-white/20 bg-white/5 text-white placeholder:text-white/40"
+                  disabled={isSubmitting}
+                  className="mt-2 min-h-[150px] border-white/20 bg-white/5 text-white placeholder:text-white/40 disabled:cursor-not-allowed disabled:opacity-60"
                 />
               </div>
 
@@ -585,11 +632,17 @@ const Index = () => {
                 <div
                   aria-live="polite"
                   className={`status-pill enter ${
-                    formStatus.type === "success" ? "success" : "error"
+                    formStatus.type === "success"
+                      ? "success"
+                      : formStatus.type === "loading"
+                        ? "loading"
+                        : "error"
                   }`}
                 >
                   {formStatus.type === "success" ? (
                     <BadgeCheck className="h-4 w-4 text-primary" />
+                  ) : formStatus.type === "loading" ? (
+                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   ) : (
                     <ShieldCheck className="h-4 w-4 text-red-200" />
                   )}
@@ -601,9 +654,9 @@ const Index = () => {
                 type="submit"
                 size="lg"
                 className="w-full justify-center shadow-button shadow-primary/40"
-                disabled={formStatus.type === "loading"}
+                disabled={isSubmitting}
               >
-                {formStatus.type === "loading" ? (
+                {isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
                     Envoi en cours…
