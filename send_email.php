@@ -113,11 +113,14 @@ $smtpPort = getenv('MAIL_PORT');
 $smtpUsername = getenv('MAIL_USERNAME');
 $smtpPassword = getenv('MAIL_PASSWORD');
 $smtpEncryption = getenv('MAIL_ENCRYPTION');
-$fromAddress = getenv('MAIL_FROM_ADDRESS');
-$fromName = getenv('MAIL_FROM_NAME');
-$toAddress = getenv('MAIL_TO_ADDRESS') ?: 'mandimbizarajuno@gmail.com';
+$defaultContactEmail = 'mamndimbizarajuno@gmail.com';
+$fromAddress = getenv('MAIL_FROM_ADDRESS') ?: $defaultContactEmail;
+$fromName = getenv('MAIL_FROM_NAME') ?: 'Mandimbizara Juno';
+$toAddress = getenv('MAIL_TO_ADDRESS') ?: $defaultContactEmail;
+$smtpReady = !empty($smtpHost) && !empty($smtpPort) && !empty($smtpUsername) && !empty($smtpPassword);
 
 debugLog("Config SMTP: $smtpHost:$smtpPort, User: $smtpUsername");
+debugLog("SMTP ready: " . ($smtpReady ? 'yes' : 'no') . ", To: $toAddress, From: $fromAddress");
 
 $subjectMap = [
     'reservation' => 'Réservation de visite',
@@ -284,7 +287,7 @@ $emailBody = "<!DOCTYPE html>
         <div class='footer'>
             <p><strong>Ce message a été envoyé depuis le formulaire de contact du site web</strong></p>
             <p>Nosy-Be, Madagascar</p>
-            <p>📞 +261 32 66 875 43 | 📧 mandimbizarajuno@gmail.com</p>
+            <p>📞 +261 32 66 875 43 | 📧 mamndimbizarajuno@gmail.com</p>
         </div>
     </div>
 </body>
@@ -407,20 +410,63 @@ function sendSMTPEmailDebug($host, $port, $username, $password, $encryption, $fr
     }
 }
 
-// Envoyer l'email (avec l'email du client dans Reply-To)
-$sent = sendSMTPEmailDebug(
-    $smtpHost,
-    $smtpPort,
-    $smtpUsername,
-    $smtpPassword,
-    $smtpEncryption,
-    $fromAddress,
-    $fromName,
-    $toAddress,
-    $emailSubject,
-    $emailBody,
-    $email  // Email du client pour Reply-To
-);
+function sendNativeMailDebug($from, $fromName, $to, $subject, $body, $replyTo = null) {
+    global $lastError;
+    try {
+        debugLog("Tentative d'envoi via mail() natif");
+        $headers = "From: {$fromName} <{$from}>\r\n";
+        $headers .= "Reply-To: " . ($replyTo ? $replyTo : $from) . "\r\n";
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+
+        $encodedSubject = "=?UTF-8?B?" . base64_encode($subject) . "?=";
+        $sent = @mail($to, $encodedSubject, $body, $headers);
+
+        if (!$sent) {
+            $lastError = "mail() natif a échoué";
+            debugLog("ERREUR: mail() natif a échoué");
+            return false;
+        }
+
+        debugLog("✓ Email envoyé avec succès via mail() natif");
+        return true;
+    } catch (Exception $e) {
+        $lastError = "Exception mail() : " . $e->getMessage();
+        debugLog("EXCEPTION mail(): " . $e->getMessage());
+        return false;
+    }
+}
+
+$sent = false;
+if ($smtpReady) {
+    // Envoyer l'email via SMTP (avec l'email du client dans Reply-To)
+    $sent = sendSMTPEmailDebug(
+        $smtpHost,
+        $smtpPort,
+        $smtpUsername,
+        $smtpPassword,
+        $smtpEncryption,
+        $fromAddress,
+        $fromName,
+        $toAddress,
+        $emailSubject,
+        $emailBody,
+        $email
+    );
+}
+
+if (!$sent) {
+    debugLog("Fallback sur mail() natif");
+    $sent = sendNativeMailDebug(
+        $fromAddress,
+        $fromName,
+        $toAddress,
+        $emailSubject,
+        $emailBody,
+        $email
+    );
+}
 
 debugLog("=== FIN DU SCRIPT ===");
 

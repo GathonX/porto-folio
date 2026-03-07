@@ -179,6 +179,8 @@ const resources = {
           loading: "Envoi en cours...",
           successDefault: "Merci ! Votre message a bien ete envoye.",
           errorFallback: "Impossible d'envoyer le message. Reessayez dans quelques minutes.",
+          endpointMissing:
+            "Le service de contact est indisponible pour le moment (endpoint introuvable).",
           responseEmpty: "Reponse vide",
           buttonSubmit: "Envoyer le message",
           buttonSubmitting: "Envoi en cours...",
@@ -389,6 +391,7 @@ const resources = {
           loading: "Sending in progress...",
           successDefault: "Thanks! Your message has been sent.",
           errorFallback: "Message could not be sent. Please try again in a few minutes.",
+          endpointMissing: "The contact service is currently unavailable (endpoint not found).",
           responseEmpty: "Empty response",
           buttonSubmit: "Send message",
           buttonSubmitting: "Sending...",

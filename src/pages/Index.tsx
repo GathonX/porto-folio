@@ -9,6 +9,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { useToast } from "@/hooks/use-toast";
 
 const heroImage = "/img/concept-de-marketing-des-medias-sociaux-pour-le-marketing-avec-des-applications11.avif";
+const CONTACT_EMAIL = "mamndimbizarajuno@gmail.com";
 
 const stats = [
   {
@@ -104,8 +105,8 @@ const caseStudies = [
 const contactChannels = [
   {
     labelKey: "home.contact.channels.email",
-    value: "mandimbizarajuno@gmail.com",
-    href: "mailto:mandimbizarajuno@gmail.com",
+    value: CONTACT_EMAIL,
+    href: `mailto:${CONTACT_EMAIL}`,
   },
   {
     labelKey: "home.contact.channels.whatsapp",
@@ -210,9 +211,16 @@ const Index = () => {
     } catch (jsonError) {
       console.warn("[Contact] JSON parse failed, fallback to text", jsonError);
       const fallback = await response.text();
+      const trimmed = fallback.trim();
+      const looksLikeHtml = /^<!doctype html/i.test(trimmed) || /^<html/i.test(trimmed);
+      const statusBasedMessage =
+        response.status === 404 ? t("home.form.endpointMissing") : t("home.form.errorFallback");
       return {
         success: response.ok,
-        message: fallback || t("home.form.responseEmpty"),
+        message:
+          looksLikeHtml
+            ? statusBasedMessage
+            : fallback || t("home.form.responseEmpty"),
       };
     }
   };
@@ -367,7 +375,7 @@ const Index = () => {
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button size="lg" className="shadow-button shadow-primary/40" asChild>
-                  <a href="mailto:mandimbizarajuno@gmail.com">
+                  <a href={`mailto:${CONTACT_EMAIL}`}>
                     <Mail className="h-4 w-4" />
                     {t("home.hero.ctaTalk")}
                   </a>
