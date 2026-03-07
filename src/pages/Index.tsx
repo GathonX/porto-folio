@@ -1,111 +1,124 @@
-import { useEffect, useMemo, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, BadgeCheck, CheckCircle2, CircuitBoard, Download, Mail, Phone, Shield, Loader2, Rocket, ShieldCheck, Stars } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowUpRight, BadgeCheck, CircuitBoard, Mail, Loader2, Rocket, ShieldCheck, Stars } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { cn } from "@/lib/utils";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { useToast } from "@/hooks/use-toast";
 
 const heroImage = "/img/concept-de-marketing-des-medias-sociaux-pour-le-marketing-avec-des-applications11.avif";
 
 const stats = [
-  { label: "Années d'expérience", value: "5+", sub: "dans le développement produit" },
-  { label: "Stack couverte", value: "Front · Back · DevOps", sub: "Laravel • React • Docker" },
-  { label: "Clients & projets", value: "15+", sub: "SaaS, tourisme, automation" },
+  {
+    labelKey: "home.stats.years.label",
+    valueKey: "home.stats.years.value",
+    subKey: "home.stats.years.sub",
+  },
+  {
+    labelKey: "home.stats.stack.label",
+    valueKey: "home.stats.stack.value",
+    subKey: "home.stats.stack.sub",
+  },
+  {
+    labelKey: "home.stats.projects.label",
+    valueKey: "home.stats.projects.value",
+    subKey: "home.stats.projects.sub",
+  },
 ];
 
 const services = [
   {
-    title: "Applications sur mesure",
-    description:
-      "De l’architecture au déploiement : Laravel, React, Vite, Tailwind et APIs robustes prêtes pour l’échelle.",
+    titleKey: "home.services.custom.title",
+    descriptionKey: "home.services.custom.description",
     icon: Rocket,
-    highlights: ["Product design", "Micro-services", "Performances & sécurité"],
+    highlights: [
+      "home.services.custom.h1",
+      "home.services.custom.h2",
+      "home.services.custom.h3",
+    ],
   },
   {
-    title: "Automatisation & IA",
-    description:
-      "Intégrations OpenAI, workflows marketing automatisés, sprints pilotés par la donnée et reporting temps réel.",
+    titleKey: "home.services.ai.title",
+    descriptionKey: "home.services.ai.description",
     icon: CircuitBoard,
-    highlights: ["Contenus assistés IA", "Pipelines marketing", "Dashboards ops"],
+    highlights: ["home.services.ai.h1", "home.services.ai.h2", "home.services.ai.h3"],
   },
   {
-    title: "Cloud & DevOps",
-    description:
-      "CI/CD GitHub Actions, conteneurisation Docker, monitoring et stratégies de rollback sans downtime.",
+    titleKey: "home.services.devops.title",
+    descriptionKey: "home.services.devops.description",
     icon: ShieldCheck,
-    highlights: ["Docker multi-env", "VPS & cloud", "Observabilité avancée"],
+    highlights: [
+      "home.services.devops.h1",
+      "home.services.devops.h2",
+      "home.services.devops.h3",
+    ],
   },
 ];
 
 const experiences = [
   {
-    company: "PixelRise · SaaS d’automatisation",
-    period: "2024 — Aujourd’hui",
+    companyKey: "home.experience.items.pixelrise.company",
+    periodKey: "home.experience.items.pixelrise.period",
     details: [
-      "Plateforme Laravel 12 + React/Vite + Tailwind pour contenus générés par IA",
-      "Architecture Docker (PHP, Node, MySQL) + pipelines CI/CD & rollback",
-      "Optimisation SQL/NoSQL, migration progressive vers Firestore",
+      "home.experience.items.pixelrise.d1",
+      "home.experience.items.pixelrise.d2",
+      "home.experience.items.pixelrise.d3",
     ],
   },
   {
-    company: "IslandManager · Plateforme tourisme",
-    period: "En cours",
+    companyKey: "home.experience.items.island.company",
+    periodKey: "home.experience.items.island.period",
     details: [
-      "Back-office Laravel 11 + Vite, auth Sanctum et rôles administrables",
-      "API REST sécurisées, logging granulaire et doc Swagger",
-      "Mise en ligne, SEO technique et accompagnement produit",
+      "home.experience.items.island.d1",
+      "home.experience.items.island.d2",
+      "home.experience.items.island.d3",
     ],
   },
   {
-    company: "Formateur freelance",
-    period: "2019 — Aujourd’hui",
+    companyKey: "home.experience.items.trainer.company",
+    periodKey: "home.experience.items.trainer.period",
     details: [
-      "Coaching dev fullstack, DevOps et bonnes pratiques industrielles",
-      "Création de programmes sur mesure pour entreprises et écoles",
+      "home.experience.items.trainer.d1",
+      "home.experience.items.trainer.d2",
     ],
   },
 ];
 
 const caseStudies = [
   {
-    title: "PixelRise Automation Suite",
-    result: "+42% de productivité des équipes marketing",
-    description:
-      "Stack Laravel + React + OpenAI orchestrée avec pipelines CI/CD, tableaux de bord et génération multi-canal (blogs, réseaux sociaux, plans marketing).",
+    titleKey: "home.caseStudies.items.pixelrise.title",
+    resultKey: "home.caseStudies.items.pixelrise.result",
+    descriptionKey: "home.caseStudies.items.pixelrise.description",
     href: "https://pixel-rise.com/",
   },
   {
-    title: "IslandManager",
-    result: "Gestion unifiée des hôtels & restaurants",
-    description:
-      "Plateforme modulaire avec rôles personnalisés, API publiques documentées et automatisation des opérations quotidiennes.",
+    titleKey: "home.caseStudies.items.island.title",
+    resultKey: "home.caseStudies.items.island.result",
+    descriptionKey: "home.caseStudies.items.island.description",
     href: undefined,
   },
 ];
 
 const contactChannels = [
   {
-    label: "Email direct",
+    labelKey: "home.contact.channels.email",
     value: "mandimbizarajuno@gmail.com",
     href: "mailto:mandimbizarajuno@gmail.com",
   },
   {
-    label: "WhatsApp",
+    labelKey: "home.contact.channels.whatsapp",
     value: "+261 32 66 875 43",
     href: "https://wa.me/261326687543",
   },
   {
-    label: "GitHub",
+    labelKey: "home.contact.channels.github",
     value: "@GathonX",
     href: "https://github.com/GathonX",
   },
   {
-    label: "Facebook",
+    labelKey: "home.contact.channels.facebook",
     value: "Tonny Montana MG Eltauraut",
     href: "https://web.facebook.com/tonny.montanamg/",
   },
@@ -120,10 +133,28 @@ const initialFormState = {
 };
 
 const contactReasons = [
-  { value: "information", label: "Demande d'information" },
-  { value: "partnership", label: "Partenariat ou mission" },
-  { value: "reservation", label: "Projet client / SaaS" },
-  { value: "other", label: "Autre sujet" },
+  { value: "information", labelKey: "home.form.subjectOptions.information" },
+  { value: "partnership", labelKey: "home.form.subjectOptions.partnership" },
+  { value: "reservation", labelKey: "home.form.subjectOptions.reservation" },
+  { value: "other", labelKey: "home.form.subjectOptions.other" },
+];
+
+const heroSkillKeys = [
+  "home.hero.skills.stack",
+  "home.hero.skills.ui",
+  "home.hero.skills.devops",
+  "home.hero.skills.ai",
+];
+
+const marqueeKeys = [
+  "home.marquee.laravel",
+  "home.marquee.react",
+  "home.marquee.devops",
+  "home.marquee.ai",
+  "home.marquee.seo",
+  "home.marquee.cloud",
+  "home.marquee.data",
+  "home.marquee.ux",
 ];
 
 const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, "");
@@ -154,6 +185,7 @@ const CONTACT_ENDPOINT = API_BASE_URL
   : `${import.meta.env.BASE_URL}send_email.php`;
 
 const Index = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialFormState);
   const [formStatus, setFormStatus] = useState<{
@@ -180,7 +212,7 @@ const Index = () => {
       const fallback = await response.text();
       return {
         success: response.ok,
-        message: fallback || "Réponse vide",
+        message: fallback || t("home.form.responseEmpty"),
       };
     }
   };
@@ -191,14 +223,14 @@ const Index = () => {
     event.preventDefault();
 
     if (!formData.name || !formData.email || !formData.message) {
-      const requiredError = "Merci de remplir les champs obligatoires.";
+      const requiredError = t("home.form.requiredError");
       setFormStatus({
         type: "error",
         message: requiredError,
       });
       toast({
         variant: "destructive",
-        title: "Champs incomplets",
+        title: t("home.form.toasts.missingTitle"),
         description: requiredError,
       });
       return;
@@ -206,7 +238,7 @@ const Index = () => {
 
     try {
       console.log("[Contact] Payload", formData);
-      setFormStatus({ type: "loading", message: "Envoi en cours..." });
+      setFormStatus({ type: "loading", message: t("home.form.loading") });
       const response = await fetch(CONTACT_ENDPOINT, {
         method: "POST",
         headers: {
@@ -222,13 +254,13 @@ const Index = () => {
         throw new Error(result?.message || `Erreur (${response.status})`);
       }
 
-      const successMessage = result?.message || "Merci ! Votre message a bien été envoyé.";
+      const successMessage = result?.message || t("home.form.successDefault");
       setFormStatus({
         type: "success",
         message: successMessage,
       });
       toast({
-        title: "Message envoyé",
+        title: t("home.form.toasts.successTitle"),
         description: successMessage,
       });
       navigate("/merci", {
@@ -243,7 +275,7 @@ const Index = () => {
       const errorMessage =
         error instanceof Error && error.message
           ? error.message
-          : "Impossible d’envoyer le message. Réessayez dans quelques minutes.";
+          : t("home.form.errorFallback");
       setFormStatus({
         type: "error",
         message: errorMessage,
@@ -251,7 +283,7 @@ const Index = () => {
       console.error("[Contact] Submit error", error);
       toast({
         variant: "destructive",
-        title: "Envoi impossible",
+        title: t("home.form.toasts.errorTitle"),
         description: errorMessage,
       });
     }
@@ -290,38 +322,59 @@ const Index = () => {
               <span className="logo-mark shadow-button">MJ</span>
               <div>
                 <p className="text-[0.65rem] font-semibold">Mandimbizara Juno</p>
-                <p className="text-[0.6rem] text-foreground/70">Fullstack + DevOps architect</p>
+                <p className="text-[0.6rem] text-foreground/70">{t("home.brandRole")}</p>
               </div>
             </div>
             <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[0.65rem] font-semibold">
               <Stars className="h-3.5 w-3.5 text-primary" />
-              Missions internationales · Disponible 2026
+              {t("home.brandAvailability")}
             </span>
+            <div className="ml-auto inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-2 py-1.5 text-[0.6rem] font-semibold tracking-[0.25em]">
+              <span className="px-2 text-white/70">{t("common.languageLabel")}</span>
+              {(["fr", "en"] as const).map((lng) => {
+                const active = (i18n.resolvedLanguage || i18n.language || "fr").startsWith(lng);
+                return (
+                  <button
+                    key={lng}
+                    type="button"
+                    onClick={() => i18n.changeLanguage(lng)}
+                    className={`rounded-full px-3 py-1 transition ${
+                      active
+                        ? "bg-primary text-white shadow-button"
+                        : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                    }`}
+                    aria-pressed={active}
+                    aria-label={t(`common.languages.${lng}`)}
+                  >
+                    {t(`common.languages.${lng}`)}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div>
-              <p className="text-sm uppercase tracking-[0.5em] text-primary/70">Digital craftsman</p>
+              <p className="text-sm uppercase tracking-[0.5em] text-primary/70">{t("home.hero.kicker")}</p>
               <h1 className="mt-4 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                Expériences digitales premium pour les{" "}
-                <span className="text-primary">SaaS ambiteux</span>,
-                acteurs du tourisme et équipes data-driven.
+                {t("home.hero.titlePrefix")}{" "}
+                <span className="text-primary">{t("home.hero.titleHighlight")}</span>,{" "}
+                {t("home.hero.titleSuffix")}
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                Architectures Laravel, interfaces React, automatisations OpenAI et opérations cloud :
-                je conçois des produits élégants, sécurisés et scalables end-to-end.
+                {t("home.hero.description")}
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button size="lg" className="shadow-button shadow-primary/40" asChild>
                   <a href="mailto:mandimbizarajuno@gmail.com">
                     <Mail className="h-4 w-4" />
-                    Planifier un échange
+                    {t("home.hero.ctaTalk")}
                   </a>
                 </Button>
                 <Button variant="secondary" size="lg" className="border border-white/20" asChild>
                   <a href="https://github.com/GathonX" target="_blank" rel="noreferrer">
-                    Portfolio GitHub
+                    {t("home.hero.ctaGithub")}
                     <ArrowUpRight className="h-4 w-4" />
                   </a>
                 </Button>
@@ -330,12 +383,12 @@ const Index = () => {
               <div className="mt-10 grid gap-6 sm:grid-cols-3">
                 {stats.map((stat) => (
                   <div
-                    key={stat.label}
+                    key={stat.labelKey}
                     className="interactive-card rounded-2xl border border-white/10 bg-white/5 p-4 text-white backdrop-blur"
                   >
-                    <p className="text-3xl font-semibold">{stat.value}</p>
-                    <p className="text-sm font-medium text-white/70">{stat.label}</p>
-                    <p className="mt-2 text-xs text-white/60">{stat.sub}</p>
+                    <p className="text-3xl font-semibold">{t(stat.valueKey)}</p>
+                    <p className="text-sm font-medium text-white/70">{t(stat.labelKey)}</p>
+                    <p className="mt-2 text-xs text-white/60">{t(stat.subKey)}</p>
                   </div>
                 ))}
               </div>
@@ -344,38 +397,28 @@ const Index = () => {
             <div className="halo">
               <div className="glass-card pulse-border relative overflow-hidden rounded-[2.5rem] border border-white/20 bg-white/10 px-8 pb-10 pt-8">
                 <div className="absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-primary/20 px-4 py-2 text-xs font-semibold text-primary backdrop-blur md:left-auto md:right-6 md:translate-x-0">
-                  Disponible pour missions 2026
+                  {t("home.hero.profileAvailability")}
                 </div>
                 <div className="relative aspect-[5/6] overflow-hidden rounded-[2rem] border border-white/15">
                   <img
                     src={heroImage}
-                    alt="Mandimbizara Juno en mission digitale"
+                    alt={t("home.hero.imageAlt")}
                     className="h-full w-full object-cover"
                     loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F27]/80 via-transparent" />
                   <div className="absolute bottom-4 left-4 rounded-full bg-white/15 px-4 py-2 text-xs uppercase tracking-[0.3em] text-white">
-                    Nosy Be Hell-ville · Madagascar
+                    {t("home.hero.location")}
                   </div>
                 </div>
 
                 <div className="mt-8 space-y-4 text-sm">
-                  <div className="flex items-center gap-3 text-white/80">
-                    <BadgeCheck className="h-5 w-5 text-primary" />
-                    Laravel · Node.js · REST APIs
-                  </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <BadgeCheck className="h-5 w-5 text-primary" />
-                    React · Vite · Tailwind · shadcn/ui
-                  </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <BadgeCheck className="h-5 w-5 text-primary" />
-                    Docker · CI/CD · Observabilité
-                  </div>
-                  <div className="flex items-center gap-3 text-white/80">
-                    <BadgeCheck className="h-5 w-5 text-primary" />
-                    Automation & OpenAI tooling
-                  </div>
+                  {heroSkillKeys.map((skillKey) => (
+                    <div key={skillKey} className="flex items-center gap-3 text-white/80">
+                      <BadgeCheck className="h-5 w-5 text-primary" />
+                      {t(skillKey)}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -388,10 +431,10 @@ const Index = () => {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="text-sm uppercase tracking-[0.4em] text-white/70">
-                Expertises
+                {t("home.expertise.kicker")}
               </p>
               <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
-                Ce que je construis pour mes clients
+                {t("home.expertise.title")}
               </h2>
             </div>
             <Button
@@ -400,7 +443,7 @@ const Index = () => {
               asChild
             >
               <a href="/docs/mandimbizara-juno-cv.pdf" download>
-                Télécharger mon profil
+                {t("home.expertise.download")}
                 <ArrowUpRight className="h-4 w-4" />
               </a>
             </Button>
@@ -409,19 +452,19 @@ const Index = () => {
           <div className="mt-10 grid gap-8 md:grid-cols-3">
             {services.map((service) => (
               <article
-                key={service.title}
+                key={service.titleKey}
                 className="interactive-card group relative rounded-3xl border border-white/10 bg-white/5 p-8 text-white backdrop-blur"
               >
                 <div className="inline-flex rounded-2xl bg-primary/20 p-3 text-primary">
                   <service.icon className="h-6 w-6" />
                 </div>
-                <h3 className="mt-6 text-2xl font-semibold">{service.title}</h3>
-                <p className="mt-4 text-sm text-white/70">{service.description}</p>
+                <h3 className="mt-6 text-2xl font-semibold">{t(service.titleKey)}</h3>
+                <p className="mt-4 text-sm text-white/70">{t(service.descriptionKey)}</p>
                 <ul className="mt-6 space-y-2 text-sm text-white/80">
                   {service.highlights.map((item) => (
                     <li key={item} className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-primary/80" />
-                      {item}
+                      {t(item)}
                     </li>
                   ))}
                 </ul>
@@ -436,11 +479,11 @@ const Index = () => {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.4em] text-primary/70">Études de cas</p>
-              <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">Impact mesurable</h2>
+              <p className="text-sm uppercase tracking-[0.4em] text-primary/70">{t("home.caseStudies.kicker")}</p>
+              <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">{t("home.caseStudies.title")}</h2>
             </div>
             <div className="text-xs uppercase tracking-[0.4em] text-white/60">
-              Glissez ou laissez défiler
+              {t("home.caseStudies.hint")}
             </div>
           </div>
 
@@ -454,16 +497,16 @@ const Index = () => {
           >
             <CarouselContent className="pl-0">
               {caseStudies.map((study) => (
-                <CarouselItem key={study.title} className="pl-8 md:basis-1/2">
+                <CarouselItem key={study.titleKey} className="pl-8 md:basis-1/2">
                   <article className="interactive-card h-full rounded-3xl border border-white/15 bg-white/10 p-8 text-white shadow-2xl shadow-primary/20 backdrop-blur">
-                    <p className="text-xs uppercase tracking-[0.3em] text-primary/80">Résultats</p>
-                    <h3 className="mt-3 text-2xl font-semibold">{study.title}</h3>
-                    <p className="mt-2 text-lg font-medium text-primary">{study.result}</p>
-                    <p className="mt-4 text-sm text-white/80">{study.description}</p>
+                    <p className="text-xs uppercase tracking-[0.3em] text-primary/80">{t("home.caseStudies.resultLabel")}</p>
+                    <h3 className="mt-3 text-2xl font-semibold">{t(study.titleKey)}</h3>
+                    <p className="mt-2 text-lg font-medium text-primary">{t(study.resultKey)}</p>
+                    <p className="mt-4 text-sm text-white/80">{t(study.descriptionKey)}</p>
                     {study.href && (
                       <Button variant="secondary" size="sm" className="mt-6 border border-white/30 text-white" asChild>
                         <a href={study.href} target="_blank" rel="noreferrer">
-                          Voir le projet
+                          {t("home.caseStudies.viewProject")}
                           <ArrowUpRight className="h-4 w-4" />
                         </a>
                       </Button>
@@ -483,14 +526,9 @@ const Index = () => {
       <section className="px-6 py-12 md:px-12">
         <div className="scroll-marquee text-white/50">
           <span>
-            <span>Laravel 12</span>
-            <span>React/Vite</span>
-            <span>Docker & CI/CD</span>
-            <span>Automation OpenAI</span>
-            <span>Audits SEO/Tech</span>
-            <span>Cloud scaling</span>
-            <span>Stratégies data-driven</span>
-            <span>UX immersive</span>
+            {marqueeKeys.map((itemKey) => (
+              <span key={itemKey}>{t(itemKey)}</span>
+            ))}
           </span>
         </div>
       </section>
@@ -500,10 +538,10 @@ const Index = () => {
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.4em] text-primary/70">
-                Expériences
+                {t("home.experience.kicker")}
               </p>
               <h2 className="mt-2 text-3xl font-semibold text-white md:text-4xl">
-                Des contextes variés, une exigence identique
+                {t("home.experience.title")}
               </h2>
             </div>
           </div>
@@ -511,20 +549,20 @@ const Index = () => {
           <div className="mt-12 space-y-10">
             {experiences.map((exp) => (
               <article
-                key={exp.company}
+                key={exp.companyKey}
                 className="interactive-card rounded-3xl border border-white/10 bg-white/5 p-8 text-white shadow-lg shadow-primary/10 backdrop-blur"
               >
                 <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                  <h3 className="text-2xl font-semibold">{exp.company}</h3>
+                  <h3 className="text-2xl font-semibold">{t(exp.companyKey)}</h3>
                   <span className="text-sm font-semibold uppercase tracking-[0.3em] text-primary/80">
-                    {exp.period}
+                    {t(exp.periodKey)}
                   </span>
                 </div>
                 <ul className="mt-6 space-y-3 text-sm text-white/75">
                   {exp.details.map((detail) => (
                     <li key={detail} className="flex gap-3">
                       <span className="mt-1 h-2 w-2 rounded-full bg-primary/70" />
-                      {detail}
+                      {t(detail)}
                     </li>
                   ))}
                 </ul>
@@ -538,13 +576,12 @@ const Index = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(18,118,158,0.35),rgba(10,15,39,0.95))]" />
         <div className="relative mx-auto max-w-6xl rounded-[3.5rem] border border-white/15 bg-white/5 p-4 text-white shadow-2xl shadow-primary/40 backdrop-blur-lg sm:p-8 lg:p-10">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-sm uppercase tracking-[0.4em] text-white/70">Collaboration</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-white/70">{t("home.contact.kicker")}</p>
             <h2 className="mt-4 text-3xl font-semibold md:text-4xl">
-              Prêt à lancer votre prochain produit ?
+              {t("home.contact.title")}
             </h2>
             <p className="mx-auto mt-4 text-base text-white/75">
-              Décrivez votre besoin (SaaS, tourisme, cloud, automation) et je reviens vers vous
-              sous 24h pour cadrer la mission. L’envoi passe par mon serveur sécurisé (SMTP O2Switch).
+              {t("home.contact.description")}
             </p>
           </div>
 
@@ -556,10 +593,10 @@ const Index = () => {
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">Nom complet *</label>
+                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.form.labels.name")} *</label>
                   <Input
                     name="name"
-                    placeholder="Ex: Rabea Andriamihaja"
+                    placeholder={t("home.form.placeholders.name")}
                     value={formData.name}
                     onChange={handleChange}
                     required
@@ -568,11 +605,11 @@ const Index = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">Email *</label>
+                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.form.labels.email")} *</label>
                   <Input
                     type="email"
                     name="email"
-                    placeholder="vous@entreprise.com"
+                    placeholder={t("home.form.placeholders.email")}
                     value={formData.email}
                     onChange={handleChange}
                     required
@@ -584,10 +621,10 @@ const Index = () => {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">Téléphone (optionnel)</label>
+                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.form.labels.phone")}</label>
                   <Input
                     name="phone"
-                    placeholder="+33 6 12 34 56 78"
+                    placeholder={t("home.form.placeholders.phone")}
                     value={formData.phone}
                     onChange={handleChange}
                     disabled={isSubmitting}
@@ -595,7 +632,7 @@ const Index = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">Sujet *</label>
+                  <label className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.form.labels.subject")} *</label>
                   <div className="relative mt-2">
                     <select
                       name="subject"
@@ -606,7 +643,7 @@ const Index = () => {
                     >
                       {contactReasons.map((reason) => (
                         <option key={reason.value} value={reason.value} className="text-gray-900">
-                          {reason.label}
+                          {t(reason.labelKey)}
                         </option>
                       ))}
                     </select>
@@ -616,10 +653,10 @@ const Index = () => {
               </div>
 
               <div>
-                <label className="text-xs uppercase tracking-[0.3em] text-white/70">Message *</label>
+                <label className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.form.labels.message")} *</label>
                 <Textarea
                   name="message"
-                  placeholder="Décrivez votre projet, vos objectifs, vos deadlines…"
+                  placeholder={t("home.form.placeholders.message")}
                   value={formData.message}
                   onChange={handleChange}
                   required
@@ -659,11 +696,11 @@ const Index = () => {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Envoi en cours…
+                    {t("home.form.buttonSubmitting")}
                   </>
                 ) : (
                   <>
-                    Envoyer le message
+                    {t("home.form.buttonSubmit")}
                     <Mail className="h-4 w-4" />
                   </>
                 )}
@@ -672,18 +709,18 @@ const Index = () => {
 
             <div className="w-full space-y-6">
               <div className="rounded-[2rem] border border-white/15 bg-white/10 p-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/70">Coordonnées directes</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.contact.directTitle")}</p>
                 <div className="mt-6 space-y-4">
                   {contactChannels.map((channel) => (
                     <a
-                      key={channel.label}
+                      key={channel.labelKey}
                       href={channel.href}
                       target="_blank"
                       rel="noreferrer"
                       className="interactive-card block rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
                     >
                       <p className="text-[0.7rem] uppercase tracking-[0.3em] text-white/60">
-                        {channel.label}
+                        {t(channel.labelKey)}
                       </p>
                       <p className="mt-1 break-words text-lg font-semibold text-white">{channel.value}</p>
                     </a>
@@ -692,17 +729,17 @@ const Index = () => {
               </div>
 
               <div className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
-                <p className="text-xs uppercase tracking-[0.3em] text-white/70">Contact express</p>
+                <p className="text-xs uppercase tracking-[0.3em] text-white/70">{t("home.contact.quickTitle")}</p>
                 <div className="mt-4 flex flex-col gap-4 sm:flex-row">
                   <Button size="lg" className="flex-1 shadow-button shadow-primary/40" asChild>
                     <a href="https://wa.me/261326687543" target="_blank" rel="noreferrer">
-                      WhatsApp direct
+                      {t("home.contact.quickWhatsapp")}
                       <ArrowUpRight className="h-4 w-4" />
                     </a>
                   </Button>
                   <Button variant="secondary" size="lg" className="flex-1 border border-white/30 text-white" asChild>
                     <a href="https://whatsapp.com/channel/0029VbBWzH1FnSz5p855Iz0R" target="_blank" rel="noreferrer">
-                      Chaîne GathonX
+                      {t("home.contact.quickChannel")}
                       <ArrowUpRight className="h-4 w-4" />
                     </a>
                   </Button>
