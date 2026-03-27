@@ -86,3 +86,41 @@ Attentes :
     Un contenu ciblé, engageant et adapté aux besoins des clients potentiels.
 
 
+====
+
+MySQL database name :u371108270_cfpAvenir_db
+MySQL username :u371108270_cfpAvenir_db
+Password* : CfpAvenir@2026
+
+
+=====
+
+MySQL Database
+	MySQL User
+	Created at
+	Website
+	
+	
+u371108270_cfpAvenir_db
+
+1 MB
+	u371108270_cfpAvenir_db	2026-03-10	
+cfp-avenir-nosybe.nosy-jet-ski.com
+		
+======
+
+Et maintenant comment j'ai fait si je deployer mon projet en ligne , actuellement j'ai déjà ça "  MySQL Database
+	MySQL User
+	Created at
+	Website
+	
+	
+u371108270_cfpAvenir_db
+
+1 MB
+	u371108270_cfpAvenir_db	2026-03-10	
+cfp-avenir-nosybe.nosy-jet-ski.com
+		
+  "
+
+Comment on fait pour lier le github avec mon server ?
